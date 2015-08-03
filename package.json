@@ -1,0 +1,29 @@
+{
+  "author": "fish <zhengxinlin@gmail.com> (https://github.com/fishbar)",
+  "name": "btest",
+  "description": "browser test case run in cli, using jsdom",
+  "version": "0.0.1",
+  "homepage": "https://github.com/fishbar/btest",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/fishbar/xfs.btest"
+  },
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha -r jscoverage test"
+  },
+  "engines": {
+    "node": ">=0.8.0"
+  },
+  "dependencies": {
+    "jsdom": "*",
+    "local-xmlhttprequest": "*",
+    "node-localstorage": "*"
+  },
+  "devDependencies": {
+    "jscoverage": "*",
+    "mocha": "*",
+    "expect.js": "*"
+  },
+  "optionalDependencies": {}
+}
