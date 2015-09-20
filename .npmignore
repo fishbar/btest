@@ -1,0 +1,7 @@
+/example/
+/test/
+/node_modules/
+debug.json
+.idea
+.lstorage
+.sstorage

@@ -1,0 +1,53 @@
+#!/usr/bin/env node
+var Btest = require('../index');
+var cmd = require('commander');
+var fs = require('fs');
+var path = require('path');
+var pkg = require(path.join(__dirname, '../package'));
+var spawn = require('child_process').spawn;
+
+function exec(cmd, cb) {
+  var args = cmd.split(/\s/);
+  cmd = spawn(args[0], args.slice(1), process.env);
+  cmd.stdout.on('data', function (data) {
+    console.log(data.toString());
+  });
+  cmd.stdout.on('error', function (data) {
+    console.log(data.toString());
+  });
+
+  cmd.stderr.on('data', function (data) {
+    console.log(data.toString());
+  });
+  cmd.stderr.on('error', function (data) {
+    console.log(data.toString());
+  });
+
+  cmd.on('close', cb);
+}
+
+cmd.version('v' + pkg.version);
+
+function run(opt) {
+  exec('./node_modules/.bin/mocha --recursive -R spec test', function (code) {
+    console.log('test ended', code);
+  });
+}
+
+cmd.command('run')
+  .alias('start')
+  .description('start server, @deprecate, using `btest start`')
+  // .option('-b, --base [value]', 'the http virtual base, i.e `http://static.taobao.com/res/js/`, base -> `/res/js/`')
+  .action(run);
+
+cmd.command('help')
+  .description('help')
+  .action(function () {
+    cmd.help();
+  });
+
+cmd.parse(process.argv);
+
+if (!cmd.args.length) {
+  cmd.help();
+}
