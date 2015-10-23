@@ -27,10 +27,6 @@ var path = require('path');
 
 require('../index');
 var expect = require('expect.js');
-// var testMod = require(path.join(__dirname, '../cube.min.js'));
-// testMod.init({
-
-// })x/xs
 
 describe('./index.js', function () {
 
