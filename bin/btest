@@ -1,11 +1,10 @@
 #!/usr/bin/env node
-// var debug = require('debug')('btest:cli');
-// 
-// css,less等文件过滤
-// 
+var Btest = require('../index');
 var cmd = require('commander');
-var spawn = require('child_process').spawn;
+var fs = require('fs');
 var path = require('path');
+var pkg = require(path.join(__dirname, '../package'));
+var spawn = require('child_process').spawn;
 
 function exec(cmd, cb) {
   var args = cmd.split(/\s/);
@@ -27,24 +26,26 @@ function exec(cmd, cb) {
 
 function run() {
   var argv = Array.prototype.slice.call(arguments);
-  var dir = argv[0];
   var filters;
   var args = argv.pop();
   if (args.filter) {
     filters = args.filter.split(',');
     var Module = require('./require.js')(filters);
     // console.log('dir ', dir);
-    exec('./node_modules/.bin/mocha -R spec ' + (dir || ''), function () {
+    exec('./node_modules/.bin/mocha -R spec ' + (args.base || ''), function () {
       console.log('btest success');
     });
   }
 }
+cmd.version('v' + pkg.version);
+
 
 cmd.command('run')
   .alias('start')
   .description('start server, @deprecate, using `btest start`')
   .option('-F, --filter [value]', 'set filter files option')
-  .option('-B, --bro [value]', 'set filter files option')
+  .option('-B, --browser [value]', 'test with browser')
+  .option('-R, --root [value]', 'the http virtual root, i.e `http://static.taobao.com/res/js/`, root -> `/res/js/`')
   .action(run);
 
 cmd.command('help')
@@ -54,3 +55,7 @@ cmd.command('help')
   });
 
 cmd.parse(process.argv);
+
+if (!cmd.args.length) {
+  cmd.help();
+}

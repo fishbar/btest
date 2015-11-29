@@ -20,6 +20,7 @@
     "debug": "~2.2.0",
     "jsdom": "~3.0.0",
     "local-xmlhttprequest": "*",
+    "mocha": "~2.3.2",
     "node-localstorage": "*"
   },
   "devDependencies": {
