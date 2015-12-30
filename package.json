@@ -2,15 +2,18 @@
   "author": "fish <zhengxinlin@gmail.com> (https://github.com/fishbar)",
   "name": "btest",
   "description": "browser test case run in cli, using jsdom",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "homepage": "https://github.com/fishbar/btest",
   "repository": {
     "type": "git",
     "url": "git://github.com/fishbar/xfs.btest"
   },
   "main": "index.js",
+  "bin": {
+    "btest": "./bin/btest"
+  },
   "scripts": {
-    "test": "mocha -r jscoverage test"
+    "test": "btest run"
   },
   "engines": {
     "node": ">=0.8.0"
