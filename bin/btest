@@ -24,6 +24,34 @@ function exec(cmd, cb) {
   cmd.on('close', cb);
 }
 
+function runWithBrowser(args) {
+  var url = path.join(__dirname, args.root || '/test');
+  var dsturl = path.join(__dirname, '../demo/test'); 
+  var testurl = path.join(__dirname, '../demo/test.js'); 
+  if (!fs.existsSync(url)) {
+    console.log('error: ' + url + ' is not exist');
+    return;
+  }
+  if (fs.existsSync(dsturl)) {
+    fs.rmdirSync(dsturl);
+  }
+  fs.readdir(url, function (err, files) {
+    if (!files.length) {
+      return console.log(' \033[31m No files to show!\033[39m\n');
+    }
+    files.length && files.forEach(function (filename) {
+      fs.symlinkSync(path.join(__dirname, (args.root || '/test/') + filename), path.join(__dirname, '../demo/test/' + filename));
+      
+    });
+  });
+  
+  //todo:
+  fs.open(testurl, 'w+' , function (err, fd) {
+    var buf = new Buffer("你好啊");
+    var c = fs.writeSync(fd, buf, 0, buf.length, 0);
+  });
+}
+
 function run() {
   var argv = Array.prototype.slice.call(arguments);
   var filters;
@@ -31,8 +59,11 @@ function run() {
   if (args.filter) {
     filters = args.filter.split(',');
     var Module = require('./require.js')(filters);
-    // console.log('dir ', dir);
-    exec('./node_modules/.bin/mocha -R spec ' + (args.base || ''), function () {
+  }
+  if (args.browser) {
+    runWithBrowser(args);
+  } else {
+    exec('./node_modules/.bin/mocha -R spec ' + (args.root || ''), function () {
       console.log('btest success');
     });
   }
@@ -44,7 +75,7 @@ cmd.command('run')
   .alias('start')
   .description('start server, @deprecate, using `btest start`')
   .option('-F, --filter [value]', 'set filter files option')
-  .option('-B, --browser [value]', 'test with browser')
+  .option('-B, --browser', 'test with browser')
   .option('-R, --root [value]', 'the http virtual root, i.e `http://static.taobao.com/res/js/`, root -> `/res/js/`')
   .action(run);
 
@@ -59,3 +90,13 @@ cmd.parse(process.argv);
 if (!cmd.args.length) {
   cmd.help();
 }
+
+/**
+ * btest -b 
+ *
+ * 1. 扫描test目录，生成一个require文件
+ * 2. 启动cube服务: btest:/xxx    test
+ * 3. 访问这个服务  open http://localhost:9999/index.html
+ * 
+ * 
+ */

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="css/mocha.css"/>
+</head>
+<body>
+<div>
+  <h1>Cube</h1>
+  <p>new way to writting front-end code</p>
+</div>
+<div id="mocha"></div>
+<div id="main"></div>
+<script type="text/javascript" src="lib/jquery.min.js"></script>
+<script type="text/javascript" src="lib/mocha.js"></script>
+<script type="text/javascript" src="lib/expect.js"></script>
+<script type="text/javascript" src='cube.min.js'></script>
+<script type="text/javascript">
+  (function () {
+    var appConfig = {
+      main: '/main.js',
+      base: '/',
+      debug: true
+    };
+    mocha.setup({
+      ui: 'bdd',
+      ignoreLeaks: true
+    });
+    Cube.register('jquery', $);
+    Cube.init({
+      charset: 'utf-8',
+      base: appConfig.base,  // or base can be cdn server: http://tbcdn.cn/edp/
+      debug: appConfig.debug,
+      enableCss: true,
+      version: 12345,
+      timeout: 2000,
+      enableCss: true,
+      remoteBase: {
+        TEST: 'http://localhost:9999'
+      }
+    });
+    Cube.use(appConfig.main, function (App) {
+      mocha.run();
+    });
+  })();
+</script>
+</body>
+</html>
