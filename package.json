@@ -17,7 +17,7 @@
   },
   "dependencies": {
     "commander": "~2.9.0",
-    "debug": "~2.2.0",
+    "debug": "~3.1.0",
     "jsdom": "~3.0.0",
     "local-xmlhttprequest": "*",
     "node-localstorage": "*"
